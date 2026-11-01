@@ -93,11 +93,25 @@ html.dark main,
    3. Balões de Mensagens (Fiel ao Print do WhatsApp)
    -------------------------------------------------------------------------- */
 
-/* Espaçamento vertical enxuto entre mensagens consecutivas */
+/* Espaçamento vertical e separação de 2px entre blocos e passos (div step) */
 .step,
-div[data-step-type] {
-    padding-top: 3px !important;
-    padding-bottom: 3px !important;
+div[data-step-type],
+div[data-step-type="tool"],
+.step-item,
+div[id^="step-"] {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+}
+
+/* Separação de 2px garantida entre blocos consecutivos (evita ficarem 100% colados) */
+.step + .step,
+div[data-step-type] + div[data-step-type],
+div[data-step-type="tool"] + div[data-step-type="tool"],
+.step-item + .step-item,
+div[id^="step-"] + div[id^="step-"] {
+    margin-top: 2px !important;
 }
 
 /* Micro-animação fluida de entrada */
@@ -216,6 +230,18 @@ div[data-step-type="assistant_message"] img[alt*="Avatar"] {
     min-height: 25px !important;
 }
 
+/* Recuo de 2px da borda lateral esquerda para o elemento da foto de perfil do sistema */
+.aspect-square.h-full.w-full.bg-transparent,
+.aspect-square.bg-transparent {
+    margin-left: 2px !important;
+}
+
+.ai-message .rounded-full,
+.ai-message span:has(> .aspect-square),
+div[data-step-type="assistant_message"] .rounded-full {
+    overflow: visible !important;
+}
+
 /* --------------------------------------------------------------------------
    4. Botão "Nova Conversa" (Clean, na paleta com hover Rosa)
    -------------------------------------------------------------------------- */
@@ -257,10 +283,19 @@ div[data-step-type="assistant_message"] img[alt*="Avatar"] {
    -------------------------------------------------------------------------- */
 
 div[data-step-type="tool"],
-.step-item {
+.step-item,
+div[id^="step-"] {
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
     border-left: 3px solid #f43f5e !important;
     border-radius: 6px !important;
     transition: transform 0.15s ease !important;
+}
+
+/* Separação interna entre cartões/cápsulas de step consecutivas */
+div[data-step-type="tool"] + div[data-step-type="tool"],
+.step-item + .step-item {
+    margin-top: 2px !important;
 }
 
 div[data-step-type="tool"]:hover,

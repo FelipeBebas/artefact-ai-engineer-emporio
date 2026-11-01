@@ -266,15 +266,9 @@ async def process_user_query(query_text: str):
 
 @cl.action_callback("quick_prompt")
 async def on_quick_prompt(action: cl.Action):
-    """Disparado quando o usuário clica em um botão de sugestão de teste."""
-    welcome_msg = cl.user_session.get("welcome_msg")
-    if welcome_msg:
-        try:
-            await welcome_msg.remove_actions()
-        except Exception:
-            pass
-        cl.user_session.set("welcome_msg", None)
-
+    """Disparado quando o usuário clica em um botão de sugestão de teste.
+    Mantém todos os botões de ação sempre visíveis no chat para testes contínuos.
+    """
     prompt = action.payload.get("prompt", "")
     if prompt:
         # Envia como user_message autêntica no balão rosa da direita
@@ -285,13 +279,7 @@ async def on_quick_prompt(action: cl.Action):
 
 @cl.on_message
 async def on_message(message: cl.Message):
-    """Processamento de mensagens digitadas pelo usuário no chat."""
-    welcome_msg = cl.user_session.get("welcome_msg")
-    if welcome_msg:
-        try:
-            await welcome_msg.remove_actions()
-        except Exception:
-            pass
-        cl.user_session.set("welcome_msg", None)
-
+    """Processamento de mensagens digitadas pelo usuário no chat.
+    Mantém todos os botões de ação sempre visíveis no histórico.
+    """
     await process_user_query(message.content)

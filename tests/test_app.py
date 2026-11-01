@@ -108,3 +108,20 @@ def test_quick_prompt_user_message_type_and_author():
     assert user_msg.author == "User"
     assert user_msg.type == "user_message"
 
+
+def test_custom_css_step_separation_and_avatar_offset():
+    """Garante que o CSS customizado aplica 2px de separação entre blocos de step e recuo no avatar."""
+    css_path = Path("public/custom.css")
+    assert css_path.exists()
+    content = css_path.read_text(encoding="utf-8")
+
+    # Separação de 2px nos steps
+    assert ".step" in content
+    assert "margin-top: 2px !important;" in content
+    assert "margin-bottom: 2px !important;" in content
+
+    # Recuo de 2px no avatar do sistema
+    assert ".aspect-square.h-full.w-full.bg-transparent" in content
+    assert "margin-left: 2px !important;" in content
+
+
