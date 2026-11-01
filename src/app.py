@@ -1,5 +1,6 @@
 """Aplicação conversacional em Chainlit e API REST FastAPI para a Empório da Música."""
 
+import asyncio
 import sys
 import uuid
 from pathlib import Path
@@ -120,25 +121,31 @@ _register_into_chainlit(fastapi_app)
 
 @cl.on_chat_start
 async def on_chat_start():
-    """Inicialização da sessão de atendimento no Chainlit."""
+    """Inicialização da sessão de atendimento no Chainlit com duas saudações sequenciais."""
     if not DB_PATH.exists():
         init_database()
 
     thread_id = f"session_{uuid.uuid4().hex[:8]}"
     cl.user_session.set("thread_id", thread_id)
 
-    boas_vindas = (
-        "🎸 **Olá! Seja muito bem-vindo(a) à Empório da Música!** 🎶\n\n"
-        "Sou o assistente virtual da loja e estou aqui para te ajudar com tudo o que precisar:\n"
-        "- 🔍 **Buscar instrumentos:** Guitarras, baixos, violões, teclados, baterias e mais\n"
-        "- 📦 **Status de pedidos:** Acompanhamento de entregas e código de rastreamento\n"
-        "- 💳 **Pagamento e frete:** Parcelamento em até 12x sem juros, desconto PIX e cálculo de entrega\n"
-        "- 🔄 **Políticas e garantias:** Trocas, devoluções em até 7 dias e suporte técnico\n\n"
+    # 1ª Mensagem de Saudação
+    primeira_msg = "🎸 Olá! Seja muito bem-vindo(a) à Empório da Música! 🎶"
+    await cl.Message(content=primeira_msg).send()
+
+    # Delay de 1 segundo entre cada mensagem (simulando digitação natural)
+    await asyncio.sleep(1.0)
+
+    # 2ª Mensagem com menu de opções e escopo da loja
+    segunda_msg = (
+        "Sou o assistente virtual da loja e estou aqui para te ajudar com tudo o que precisar:\n\n"
+        "🔍 **Buscar instrumentos:** Guitarras, baixos, violões, teclados, baterias e mais\n"
+        "📦 **Status de pedidos:** Acompanhamento de entregas e código de rastreamento\n"
+        "💳 **Pagamento e frete:** Parcelamento em até 12x sem juros, desconto PIX e cálculo de entrega\n"
+        "🔄 **Políticas e garantias:** Trocas, devoluções em até 7 dias e suporte técnico\n\n"
         "> *Nota: Trabalhamos exclusivamente com instrumentos musicais (não comercializamos cordas avulsas, palhetas, cabos, pedais ou amplificadores).*\n\n"
         "**Como posso ajudar o seu som hoje?**"
     )
-
-    await cl.Message(content=boas_vindas).send()
+    await cl.Message(content=segunda_msg).send()
 
 
 @cl.on_message
