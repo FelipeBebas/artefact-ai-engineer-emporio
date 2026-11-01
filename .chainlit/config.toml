@@ -120,7 +120,7 @@ name = "Empório da Música"
 
 # Force a specific language for all users (e.g., "en-US", "he-IL", "fr-FR")
 # If not set, the browser's language will be used
-# language = "en-US"
+language = "pt-BR"
 
 # layout = "wide"
 
@@ -175,10 +175,10 @@ alert_style = "classic"
 logo_file_url = ""
 
 # Load assistant avatar image directly from URL.
-default_avatar_file_url = ""
+default_avatar_file_url = "/public/avatars/emporio_da_musica.svg"
 
 # Avatar size in pixels (default: 20).
-# avatar_size = 20
+avatar_size = 25
 
 # Specify a custom build directory for the frontend.
 # This can be used to customize the frontend code.

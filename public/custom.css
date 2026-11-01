@@ -200,10 +200,20 @@ div[data-step-type="assistant_message"] .message-content p:last-child {
     margin-bottom: 0 !important;
 }
 
-/* Alinhamento superior do avatar ao lado do balão */
+/* Alinhamento superior do avatar ao lado do balão e aumento de 25% (20px -> 25px) */
 .ai-message {
     align-items: flex-start !important;
     gap: 8px !important;
+}
+
+.ai-message [role="img"],
+.ai-message img[alt*="Avatar"],
+.ai-message span:has(> img[alt*="Avatar"]),
+div[data-step-type="assistant_message"] img[alt*="Avatar"] {
+    width: 25px !important;
+    height: 25px !important;
+    min-width: 25px !important;
+    min-height: 25px !important;
 }
 
 /* --------------------------------------------------------------------------
@@ -256,4 +266,58 @@ div[data-step-type="tool"],
 div[data-step-type="tool"]:hover,
 .step-item:hover {
     transform: translateX(2px) !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   6. Botões de Sugestão de Prompt (Action Buttons & Chat Starters)
+   -------------------------------------------------------------------------- */
+#starters,
+div.actions,
+div:has(> button[id^="action-"]) {
+    margin-top: 10px !important;
+    margin-bottom: 12px !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+}
+
+#starters button,
+button[id^="action-"],
+div.actions button {
+    background-color: #202c33 !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #e9edef !important;
+    border-radius: 20px !important;
+    padding: 8px 14px !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25) !important;
+}
+
+#starters button p,
+button[id^="action-"] p,
+div.actions button p {
+    color: #e9edef !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    margin: 0 !important;
+}
+
+#starters button:hover,
+button[id^="action-"]:hover,
+div.actions button:hover {
+    background-color: #2a3942 !important;
+    border-color: #f43f5e !important;
+    color: #f43f5e !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 10px rgba(244, 63, 94, 0.2) !important;
+}
+
+#starters button:hover p,
+button[id^="action-"]:hover p,
+div.actions button:hover p {
+    color: #f43f5e !important;
 }

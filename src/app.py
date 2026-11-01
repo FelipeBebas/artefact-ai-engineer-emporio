@@ -119,6 +119,38 @@ _register_into_chainlit(fastapi_app)
 # Handlers do Chainlit (Interface Web Conversacional)
 # ==============================================================================
 
+@cl.set_starters
+async def set_starters():
+    """Botões de sugestão rápida com os principais cenários de teste do assistente."""
+    return [
+        cl.Starter(
+            label="🎸 Violões até R$ 1.000",
+            message="Quais opções de violões disponíveis custando até R$1000?",
+            icon="/public/avatars/emporio_da_musica.svg",
+        ),
+        cl.Starter(
+            label="📍 Endereço e Horários",
+            message="Qual o endereço e horário de funcionamento da loja?",
+            icon="/public/avatars/emporio_da_musica.svg",
+        ),
+        cl.Starter(
+            label="💰 Preço Takamine GD20",
+            message="Quanto custa o Takamine GD20?",
+            icon="/public/avatars/emporio_da_musica.svg",
+        ),
+        cl.Starter(
+            label="🔄 Política de Devolução",
+            message="Me arrependi da minha compra, posso devolver meu pedido?",
+            icon="/public/avatars/emporio_da_musica.svg",
+        ),
+        cl.Starter(
+            label="📦 Rastrear Pedido a Caminho",
+            message="Gostaria de saber o status do meu pedido #8 (código BRJL5544332BR)",
+            icon="/public/avatars/emporio_da_musica.svg",
+        ),
+    ]
+
+
 @cl.on_chat_start
 async def on_chat_start():
     """Inicialização da sessão de atendimento no Chainlit com duas saudações sequenciais."""
@@ -145,17 +177,47 @@ async def on_chat_start():
         "> *Nota: Trabalhamos exclusivamente com instrumentos musicais (não comercializamos cordas avulsas, palhetas, cabos, pedais ou amplificadores).*\n\n"
         "**Como posso ajudar o seu som hoje?**"
     )
-    await cl.Message(content=segunda_msg).send()
+
+    # Botões de sugestão interativos exibidos na interface (somem após a 1ª interação)
+    actions = [
+        cl.Action(
+            name="quick_prompt",
+            payload={"prompt": "Quais opções de violões disponíveis custando até R$1000?"},
+            label="🎸 Violões até R$ 1.000",
+        ),
+        cl.Action(
+            name="quick_prompt",
+            payload={"prompt": "Qual o endereço e horário de funcionamento da loja?"},
+            label="📍 Endereço e Horários",
+        ),
+        cl.Action(
+            name="quick_prompt",
+            payload={"prompt": "Quanto custa o Takamine GD20?"},
+            label="💰 Preço Takamine GD20",
+        ),
+        cl.Action(
+            name="quick_prompt",
+            payload={"prompt": "Me arrependi da minha compra, posso devolver meu pedido?"},
+            label="🔄 Política de Devolução",
+        ),
+        cl.Action(
+            name="quick_prompt",
+            payload={"prompt": "Gostaria de saber o status do meu pedido #8 (código BRJL5544332BR)"},
+            label="📦 Rastrear Pedido a Caminho",
+        ),
+    ]
+
+    welcome_msg = await cl.Message(content=segunda_msg, actions=actions).send()
+    cl.user_session.set("welcome_msg", welcome_msg)
 
 
-@cl.on_message
-async def on_message(message: cl.Message):
-    """Processamento de mensagens dos clientes com exibição transparente dos passos do agente."""
+async def process_user_query(query_text: str):
+    """Execução do agente LangGraph e exibição dos passos de ferramentas."""
     thread_id = cl.user_session.get("thread_id", "default_thread")
     config = {"configurable": {"thread_id": thread_id}}
     app = get_agent_graph()
 
-    inputs = {"messages": [HumanMessage(content=message.content)]}
+    inputs = {"messages": [HumanMessage(content=query_text)]}
 
     final_reply = ""
     for chunk in app.stream(inputs, config=config, stream_mode="updates"):
@@ -184,3 +246,28 @@ async def on_message(message: cl.Message):
             final_reply = "Desculpe, ocorreu uma instabilidade ao gerar a resposta. Poderia repetir a pergunta?"
 
     await cl.Message(content=final_reply).send()
+
+
+@cl.action_callback("quick_prompt")
+async def on_quick_prompt(action: cl.Action):
+    """Disparado quando o usuário clica em um botão de sugestão de teste."""
+    welcome_msg = cl.user_session.get("welcome_msg")
+    if welcome_msg:
+        await welcome_msg.remove_actions()
+        cl.user_session.set("welcome_msg", None)
+
+    prompt = action.payload.get("prompt", "")
+    if prompt:
+        await cl.Message(content=prompt).send()
+        await process_user_query(prompt)
+
+
+@cl.on_message
+async def on_message(message: cl.Message):
+    """Processamento de mensagens digitadas pelo usuário no chat."""
+    welcome_msg = cl.user_session.get("welcome_msg")
+    if welcome_msg:
+        await welcome_msg.remove_actions()
+        cl.user_session.set("welcome_msg", None)
+
+    await process_user_query(message.content)
