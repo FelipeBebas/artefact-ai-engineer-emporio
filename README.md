@@ -17,6 +17,19 @@ The agent resolves human team overload by providing instantaneous, welcoming, an
 
 ---
 
+## 🎬 Live Demo
+
+<div align="center">
+  <video src="https://github.com/FelipeBebas/artefact-ai-engineer-emporio/raw/master/docs/assets/demo-artefact-ai.mp4" width="85%" controls playsinline autoplay loop muted></video>
+  <p><em>Demonstração da interface conversacional (tema WhatsApp Dark, botões de consulta rápida e raciocínio determinístico)</em></p>
+  <p>
+    ▶️ <a href="https://github.com/FelipeBebas/artefact-ai-engineer-emporio/raw/master/docs/assets/demo-artefact-ai.mp4"><strong>Assistir ao vídeo da demonstração (25s)</strong></a> &nbsp;|&nbsp; 
+    📦 <a href="https://github.com/FelipeBebas/artefact-ai-engineer-emporio/releases/tag/v1.0.0"><strong>Download via Release v1.0.0</strong></a>
+  </p>
+</div>
+
+---
+
 ## 🏛️ System Architecture
 
 ```mermaid
