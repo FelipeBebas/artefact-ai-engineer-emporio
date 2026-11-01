@@ -3,7 +3,7 @@
    Altere o valor abaixo livremente (ex: 0.08, 0.15, 0.25, 0.40, etc.):
    ========================================================================== */
 :root {
-    --bg-doodle-opacity: 0.40; /* <-- EDITE AQUI: de 0.01 (quase invisível) a 1.0 (sólido) */
+    --bg-doodle-opacity:0.05; /* <-- EDITE AQUI: de 0.01 (quase invisível) a 1.0 (sólido) */
 }
 
 /* ==========================================================================
@@ -114,16 +114,36 @@ html.dark main,
     }
 }
 
-/* Aplicar animação sem sobrescrever as cores cinza/rosa nativas */
+/* Balão do Usuário (User 1 - Direita) */
 div[data-step-type="user_message"] div.bg-accent,
 div[data-step-type="user_message"] .bg-accent,
 div[data-step-type="user_message"] div:has(> .edit-message) {
     animation: messageSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
 }
 
-div[data-step-type="assistant_message"] .ai-message,
-div.ai-message {
+/* Balão do Assistente / System (User 2 - Esquerda) */
+/* Cinza elegante um pouco mais claro que o fundo, no formato de balão com cantos arredondados */
+div[data-step-type="assistant_message"] .message-content,
+.ai-message .message-content {
+    background-color: hsl(var(--card)) !important;
+    border: 1px solid hsl(var(--border) / 0.5) !important;
+    border-radius: 4px 16px 16px 16px !important;
+    padding: 12px 18px !important;
+    width: fit-content !important;
+    max-width: 82% !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14) !important;
     animation: messageSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+/* Ajuste de espaçamento interno do texto dentro do balão do assistente */
+div[data-step-type="assistant_message"] .message-content p:last-child,
+.ai-message .message-content p:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Alinhamento superior do avatar ao lado do balão */
+.ai-message {
+    align-items: flex-start !important;
 }
 
 /* --------------------------------------------------------------------------
