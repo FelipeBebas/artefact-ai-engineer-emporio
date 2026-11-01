@@ -27,7 +27,7 @@ div[data-panel],
 main {
     background-image: url("/public/doodle-background.svg") !important;
     background-repeat: repeat !important;
-    background-size: 380px !important;
+    background-size: 665px !important;
     background-attachment: fixed !important;
 }
 
@@ -76,7 +76,7 @@ html.dark main,
 .dark main {
     background-image: url("/public/doodle-dark.svg") !important;
     background-repeat: repeat !important;
-    background-size: 380px !important;
+    background-size: 665px !important;
     background-attachment: fixed !important;
 }
 
