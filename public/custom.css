@@ -1,25 +1,26 @@
 /* ==========================================================================
    CONFIGURAÇÃO RÁPIDA DE OPACIDADE DO FUNDO:
-   Altere o valor abaixo livremente (ex: 0.08, 0.15, 0.25, 0.40, etc.):
    ========================================================================== */
 :root {
-    --bg-doodle-opacity:0.05; /* <-- EDITE AQUI: de 0.01 (quase invisível) a 1.0 (sólido) */
+    --bg-doodle-opacity: 0.06; /* Substituto exato do print do WhatsApp (sutil e discreto) */
 }
 
 /* ==========================================================================
-   Empório da Música — Custom Styling & Aesthetic Theme for Chainlit
+   Empório da Música — Custom Styling (Fiel ao WhatsApp Dark com Rosa na Identidade)
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. Papel de Parede Agnóstico com Opacidade Controlada por CSS
+   1. Fundo Grafite Profundo (#0b141a) com Doodle Suave
    -------------------------------------------------------------------------- */
 
 html,
-body {
-    background-color: hsl(var(--background)) !important;
+body,
+#root,
+.h-screen {
+    background-color: #0b141a !important; /* Cor de fundo original do WhatsApp Dark */
 }
 
-/* Camada fixa do Wallpaper (controlada 100% pela variável --bg-doodle-opacity) */
+/* Camada fixa do Wallpaper */
 body::before {
     content: "";
     position: fixed;
@@ -27,19 +28,12 @@ body::before {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-image: url("/public/doodle-background.svg?v=3");
+    background-image: url("/public/doodle-dark.svg?v=4");
     background-repeat: repeat;
     background-size: 665px;
     opacity: var(--bg-doodle-opacity);
     pointer-events: none;
     z-index: 0;
-}
-
-/* No modo escuro, troca para os traços brancos mantendo a mesma opacidade da variável */
-html.dark body::before,
-.dark body::before {
-    background-image: url("/public/doodle-dark.svg?v=3");
-    opacity: var(--bg-doodle-opacity);
 }
 
 /* Garantir que o conteúdo do app fique acima da camada do doodle sem cobri-la com cor sólida */
@@ -84,122 +78,133 @@ html.dark main,
 }
 
 /* --------------------------------------------------------------------------
-   2. Barra Superior (Header) com Vidro Fosco (Backdrop Blur)
+   2. Barra Superior (Header) com Vidro Fosco Escuro
    -------------------------------------------------------------------------- */
 
 #header {
-    background-color: hsl(var(--background) / 0.8) !important;
+    background-color: rgba(17, 27, 33, 0.85) !important;
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
-    border-bottom: 1px solid hsl(var(--border)) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
     z-index: 20 !important;
 }
 
 /* --------------------------------------------------------------------------
-   3. Balões de Mensagens (Estética Nativa Cinza Escuro & Rosa)
+   3. Balões de Mensagens (Fiel ao Print do WhatsApp)
    -------------------------------------------------------------------------- */
 
-/* Micro-animação fluida de entrada das mensagens (Slide-up suave + Fade-in) */
+/* Espaçamento vertical enxuto entre mensagens consecutivas */
+.step,
+div[data-step-type] {
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+}
+
+/* Micro-animação fluida de entrada */
 @keyframes messageSlideUp {
     from {
         opacity: 0;
-        transform: translateY(6px) scale(0.99);
+        transform: translateY(4px);
     }
     to {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(0);
     }
 }
 
-/* Balão do Usuário (User 1 - Direita) */
-/* Encapsulado em cinza elegante (um pouco mais claro que o fundo), formato WhatsApp com rabicho na direita */
+/* --------------------------------------------------------------------------
+   Balão do Usuário (User 1 - Direita)
+   Rosa escuro da identidade visual (equivalente ao verde #005c4b do WhatsApp)
+   -------------------------------------------------------------------------- */
+
 div[data-step-type="user_message"] div.bg-accent,
 div[data-step-type="user_message"] .bg-accent,
 div[data-step-type="user_message"] div[class*="rounded-3xl"],
 div[data-step-type="user_message"] div:has(> .edit-message) {
-    background-color: hsl(var(--secondary)) !important;
-    border: 1px solid hsl(var(--border)) !important;
-    border-radius: 16px 4px 16px 16px !important;
-    padding: 12px 18px !important;
-    color: hsl(var(--foreground)) !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16) !important;
-    animation: messageSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    background-color: #831843 !important; /* Rosa elegante da identidade visual */
+    color: #ffffff !important;
+    border-radius: 8px !important;
+    padding: 7px 13px !important;
+    width: fit-content !important;
+    max-width: 75% !important;
+    margin-left: auto !important;
+    box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.3) !important;
+    border: none !important;
+    font-size: 14.5px !important;
+    line-height: 1.4 !important;
+    animation: messageSlideUp 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
 }
 
-/* Modo Escuro: Contraste perfeito do balão do usuário sobre o fundo */
-html.dark div[data-step-type="user_message"] div.bg-accent,
-.dark div[data-step-type="user_message"] div.bg-accent,
-html.dark div[data-step-type="user_message"] div[class*="rounded-3xl"],
-.dark div[data-step-type="user_message"] div[class*="rounded-3xl"],
-html.dark div[data-step-type="user_message"] div:has(> .edit-message),
-.dark div[data-step-type="user_message"] div:has(> .edit-message) {
-    background-color: hsl(0 0% 21%) !important;
-    border: 1px solid hsl(0 0% 28%) !important;
-    color: hsl(0 0% 95%) !important;
+div[data-step-type="user_message"] p,
+div[data-step-type="user_message"] span,
+div[data-step-type="user_message"] div {
+    color: #ffffff !important;
 }
 
-/* Balão do Assistente / System (User 2 - Esquerda) */
-/* Cinza suave (18% vs 13% do fundo), formato WhatsApp com rabicho na esquerda */
+/* --------------------------------------------------------------------------
+   Balão do Assistente / System (User 2 - Esquerda)
+   Cinza escuro clássico do WhatsApp (#202c33) com texto claro (#e9edef)
+   -------------------------------------------------------------------------- */
+
 div[data-step-type="assistant_message"] .message-content,
 .ai-message .message-content {
-    background-color: hsl(var(--card)) !important;
-    border: 1px solid hsl(var(--border) / 0.5) !important;
-    border-radius: 4px 16px 16px 16px !important;
-    padding: 12px 18px !important;
+    background-color: #202c33 !important; /* Cinza oficial do WhatsApp Dark */
+    color: #e9edef !important;
+    border-radius: 8px !important;
+    padding: 7px 13px !important;
     width: fit-content !important;
-    max-width: 82% !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14) !important;
-    animation: messageSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    max-width: 75% !important;
+    box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.3) !important;
+    border: none !important;
+    font-size: 14.5px !important;
+    line-height: 1.4 !important;
+    animation: messageSlideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
 }
 
-/* Modo Escuro: Balão do assistente em cinza suave */
-html.dark div[data-step-type="assistant_message"] .message-content,
-.dark div[data-step-type="assistant_message"] .message-content,
-html.dark .ai-message .message-content,
-.dark .ai-message .message-content {
-    background-color: hsl(0 0% 18%) !important;
-    border: 1px solid hsl(0 0% 25%) !important;
-    color: hsl(0 0% 93%) !important;
+div[data-step-type="assistant_message"] .message-content p,
+div[data-step-type="assistant_message"] .message-content span,
+div[data-step-type="assistant_message"] .message-content li {
+    color: #e9edef !important;
 }
 
-/* Ajuste de espaçamento interno do texto dentro do balão do assistente */
-div[data-step-type="assistant_message"] .message-content p:last-child,
-.ai-message .message-content p:last-child {
+/* Remover margens inferiores sobrando dentro dos balões */
+div[data-step-type="user_message"] p:last-child,
+div[data-step-type="assistant_message"] .message-content p:last-child {
     margin-bottom: 0 !important;
 }
 
 /* Alinhamento superior do avatar ao lado do balão */
 .ai-message {
     align-items: flex-start !important;
+    gap: 8px !important;
 }
 
 /* --------------------------------------------------------------------------
-   4. Botão "Nova Conversa" (Ajustado, sem vazamento, na paleta Cinza/Rosa)
+   4. Botão "Nova Conversa" (Clean, na paleta com hover Rosa)
    -------------------------------------------------------------------------- */
 
 #new-chat-button {
     width: auto !important;
     min-width: fit-content !important;
-    height: 36px !important;
+    height: 34px !important;
     padding: 0 12px !important;
     border-radius: 8px !important;
-    background-color: hsl(var(--secondary)) !important;
-    border: 1px solid hsl(var(--border)) !important;
-    color: hsl(var(--foreground)) !important;
+    background-color: #202c33 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #e9edef !important;
     display: inline-flex !important;
     align-items: center !important;
     gap: 6px !important;
     white-space: nowrap !important;
     transition: all 0.2s ease-in-out !important;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
 }
 
 #new-chat-button:hover {
-    border-color: hsl(var(--primary)) !important;
-    color: hsl(var(--primary)) !important;
-    background-color: hsl(var(--accent)) !important;
+    border-color: #f43f5e !important;
+    color: #f43f5e !important;
+    background-color: #2a3942 !important;
     transform: translateY(-1px) !important;
-    box-shadow: 0 2px 6px hsl(var(--primary) / 0.2) !important;
 }
 
 #new-chat-button::after {
@@ -216,7 +221,7 @@ div[data-step-type="assistant_message"] .message-content p:last-child,
 
 div[data-step-type="tool"],
 .step-item {
-    border-left: 3px solid hsl(var(--primary)) !important;
+    border-left: 3px solid #f43f5e !important;
     border-radius: 6px !important;
     transition: transform 0.15s ease !important;
 }
