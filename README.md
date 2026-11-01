@@ -23,7 +23,7 @@ The agent resolves human team overload by providing instantaneous, welcoming, an
   <img src="docs/assets/demo.gif" width="75%" alt="Empório da Música AI Agent Demo" />
   <p><em>Real-time conversational interface demonstration (WhatsApp Dark theme, quick-query buttons, and deterministic reasoning)</em></p>
   <p>
-    🎬 <a href="https://github.com/FelipeBebas/artefact-ai-engineer-emporio/raw/master/docs/assets/demo-artefact-ai.mp4"><strong>Vídeo original em alta definição (.mp4)</strong></a> &nbsp;|&nbsp; 
+    🎬 <a href="https://github.com/FelipeBebas/artefact-ai-engineer-emporio/raw/master/docs/assets/demo-artefact-ai.mp4"><strong>Original Video(.mp4)</strong></a> &nbsp;|&nbsp; 
     📦 <a href="https://github.com/FelipeBebas/artefact-ai-engineer-emporio/releases/tag/v1.0.0"><strong>Release v1.0.0 no GitHub</strong></a>
   </p>
 </div>
