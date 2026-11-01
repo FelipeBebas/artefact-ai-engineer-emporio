@@ -161,9 +161,28 @@ Interact directly through the command line:
 .venv\Scripts\python src/cli.py --query "Quais opções de violões disponíveis custando até R$1000?"
 ```
 
-### 7. Running the Test Suite
+### 7. REST API & Interactive Swagger (`/docs`)
 
-Execute the comprehensive automated test suite with full coverage of the database layer, policy engine, and LangGraph agent:
+In addition to the interactive Chainlit UI, the application exposes a unified FastAPI REST API on the same server:
+- **Interactive Swagger Docs:** Access `http://localhost:8000/docs` in your browser.
+- **Chat Endpoint (`POST /api/chat`):**
+  ```bash
+  curl -X POST "http://localhost:8000/api/chat" \
+       -H "Content-Type: application/json" \
+       -d '{"message": "Quais violões custam até R$ 1000?", "session_id": "test_session_1"}'
+  ```
+- **Catalog Endpoint (`GET /api/catalog`):**
+  ```bash
+  curl "http://localhost:8000/api/catalog?categoria=Violões&preco_max=1000"
+  ```
+- **Health Check (`GET /api/health`):**
+  ```bash
+  curl "http://localhost:8000/api/health"
+  ```
+
+### 8. Running the Test Suite
+
+Execute the comprehensive automated test suite with full coverage of the database layer, policy engine, LangGraph agent, and REST API:
 ```bash
 .venv\Scripts\python -m pytest tests/
 ```
@@ -191,6 +210,10 @@ Execute the comprehensive automated test suite with full coverage of the databas
 ### 5. Prompt Engineering & Persona Design
 - **Decision:** Persona prompt designed as an empathetic, knowledgeable musical instrument advisor who synthesizes operational rules into 2–4 concise, human sentences.
 - **Rationale:** Legalistic regurgitation alienates retail customers. The agent translates consumer rights and warranty rules into conversational clarity while strictly adhering to the "instruments only" rule.
+
+### 6. WhatsApp Web Aesthetics, Theme-Agnostic Doodle Wallpaper & REST API
+- **Decision:** Custom styling (`public/custom.css`) applying a repeating musical instruments doodle wallpaper (`public/doodle-background.svg`), disabling spontaneous file uploads (`config.toml`), and serving a unified REST API on the same FastAPI server.
+- **Rationale:** To deliver an authentic WhatsApp Web feel, the wallpaper dynamically reacts to light mode (`#efeae2` with 6% dark lines) and dark mode (`#0b141a` using CSS `filter: invert(1)` with 5% white lines), with `pointer-events: none` to keep text selection effortless. Disabling file uploads keeps the chat focused strictly on text consultations, and exposing `/api/*` endpoints with Swagger documentation enables seamless headless testing and third-party integrations (e.g. Typebot, Postman).
 
 ---
 
