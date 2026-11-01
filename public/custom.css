@@ -1,88 +1,74 @@
 /* ==========================================================================
+   CONFIGURAÇÃO RÁPIDA DE OPACIDADE DO FUNDO:
+   Altere o valor abaixo livremente (ex: 0.08, 0.15, 0.25, 0.40, etc.):
+   ========================================================================== */
+:root {
+    --bg-doodle-opacity: 0.40; /* <-- EDITE AQUI: de 0.01 (quase invisível) a 1.0 (sólido) */
+}
+
+/* ==========================================================================
    Empório da Música — Custom Styling & Aesthetic Theme for Chainlit
-   (Preservando a identidade visual nativa Cinza Escuro & Rosa do Chainlit)
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. Papel de Parede Agnóstico (Doodle Musical: Modo Claro & Escuro)
+   1. Papel de Parede Agnóstico com Opacidade Controlada por CSS
    -------------------------------------------------------------------------- */
 
-/* Modo Claro: Base suave com traços musicais */
 html,
-body,
-#root,
-.h-screen,
-main,
-[data-sidebar="inset"],
-div[data-panel],
-div[data-panel-group],
-div[class*="overflow-y-auto"],
-div[class*="overflow-auto"] {
+body {
     background-color: hsl(var(--background)) !important;
 }
 
-/* Aplicação direta do wallpaper doodle no body e no container principal */
-body,
-#root,
-div[data-panel],
-main {
-    background-image: url("/public/doodle-background.svg") !important;
-    background-repeat: repeat !important;
-    background-size: 665px !important;
-    background-attachment: fixed !important;
+/* Camada fixa do Wallpaper (controlada 100% pela variável --bg-doodle-opacity) */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("/public/doodle-background.svg?v=3");
+    background-repeat: repeat;
+    background-size: 665px;
+    opacity: var(--bg-doodle-opacity);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* No modo escuro, troca para os traços brancos mantendo a mesma opacidade da variável */
+html.dark body::before,
+.dark body::before {
+    background-image: url("/public/doodle-dark.svg?v=3");
+    opacity: var(--bg-doodle-opacity);
+}
+
+/* Garantir que o conteúdo do app fique acima da camada do doodle sem cobri-la com cor sólida */
+#root {
+    position: relative;
+    z-index: 1;
+    background-color: transparent !important;
 }
 
 /* Manter os containers intermediários transparentes para revelar o papel de parede */
 #root > div,
+.h-screen,
+div[data-panel],
 div[data-panel-group],
 div[data-panel] > div,
 div[class*="overflow-y-auto"],
 div[class*="overflow-auto"],
 div[class*="flex-grow"],
 div.dropzone,
-div.tasklist {
+div.tasklist,
+main,
+[data-sidebar="inset"] {
     background-color: transparent !important;
-}
-
-/* Modo Escuro: Cinza escuro profundo do Chainlit com doodle suave */
-html.dark,
-html.dark body,
-.dark body,
-html.dark #root,
-.dark #root,
-html.dark .h-screen,
-.dark .h-screen,
-html.dark main,
-.dark main,
-html.dark [data-sidebar="inset"],
-.dark [data-sidebar="inset"],
-html.dark div[data-panel],
-.dark div[data-panel],
-html.dark div[data-panel-group],
-.dark div[data-panel-group],
-html.dark div[class*="overflow-y-auto"],
-.dark div[class*="overflow-y-auto"],
-html.dark div[class*="overflow-auto"],
-.dark div[class*="overflow-auto"] {
-    background-color: hsl(var(--background)) !important;
-}
-
-html.dark body,
-.dark body,
-html.dark #root,
-.dark #root,
-html.dark div[data-panel],
-.dark div[data-panel],
-html.dark main,
-.dark main {
-    background-image: url("/public/doodle-dark.svg") !important;
-    background-repeat: repeat !important;
-    background-size: 665px !important;
-    background-attachment: fixed !important;
 }
 
 html.dark #root > div,
 .dark #root > div,
+html.dark div[data-panel],
+.dark div[data-panel],
 html.dark div[data-panel-group],
 .dark div[data-panel-group],
 html.dark div[data-panel] > div,
@@ -94,7 +80,9 @@ html.dark div[class*="overflow-auto"],
 html.dark div[class*="flex-grow"],
 .dark div[class*="flex-grow"],
 html.dark div.dropzone,
-.dark div.dropzone {
+.dark div.dropzone,
+html.dark main,
+.dark main {
     background-color: transparent !important;
 }
 
