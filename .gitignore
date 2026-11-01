@@ -22,4 +22,5 @@ emporio.db
 # Chainlit
 .chainlit/*
 !.chainlit/config.toml
+!.chainlit/translations/
 .files/
