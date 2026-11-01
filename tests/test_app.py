@@ -33,7 +33,7 @@ def test_set_starters_returns_challenge_scenarios():
 
 
 def test_chainlit_localization_config():
-    """Verifica se o config.toml do Chainlit define o idioma pt-BR, avatar e avatar_size aumentado em 25%."""
+    """Verifica se o config.toml do Chainlit define o idioma pt-BR, avatar, tamanho e custom_js."""
     config_path = Path(".chainlit/config.toml")
     assert config_path.exists()
 
@@ -41,10 +41,11 @@ def test_chainlit_localization_config():
     assert 'language = "pt-BR"' in content
     assert 'default_avatar_file_url = "/public/avatars/emporio_da_musica.svg"' in content
     assert 'avatar_size = 25' in content
+    assert 'custom_js = "/public/custom.js"' in content
 
 
 def test_pt_br_translation_file():
-    """Valida o arquivo de tradução pt-BR e o placeholder traduzido para a caixa de mensagem."""
+    """Valida o arquivo de tradução pt-BR, placeholder da caixa de texto e botão Readme."""
     translation_path = Path(".chainlit/translations/pt-BR.json")
     assert translation_path.exists()
 
@@ -52,6 +53,16 @@ def test_pt_br_translation_file():
     assert "chat" in data
     assert "input" in data["chat"]
     assert data["chat"]["input"]["placeholder"] == "Digite sua mensagem aqui..."
+    assert data["navigation"]["header"]["readme"] == "Readme"
+
+
+def test_custom_js_github_readme_redirect():
+    """Valida que public/custom.js existe e intercepta o botão Readme com o repositório GitHub."""
+    js_path = Path("public/custom.js")
+    assert js_path.exists()
+    content = js_path.read_text(encoding="utf-8")
+    assert "readme-button" in content
+    assert "https://github.com/FelipeBebas/artefact-ai-engineer-emporio" in content
 
 
 def test_avatar_files_exist():

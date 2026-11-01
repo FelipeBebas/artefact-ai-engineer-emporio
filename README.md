@@ -79,7 +79,7 @@ The agent resolves human team overload by providing instantaneous, welcoming, an
 
 Clone the repository and enter the project root directory:
 ```bash
-git clone https://github.com/your-username/artefact-ai-engineer-emporio.git
+git clone https://github.com/FelipeBebas/artefact-ai-engineer-emporio.git
 cd artefact-ai-engineer-emporio
 ```
 

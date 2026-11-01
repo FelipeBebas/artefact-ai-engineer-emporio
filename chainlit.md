@@ -1,14 +1,21 @@
-# Welcome to Chainlit! 🚀🤖
+# 🎸 Empório da Música — AI Customer Service Agent
+> **Technical Case — AI Engineer | Artefact**  
+> Candidato: **Felipe Barros** (`felipe.barros.ia@gmail.com`)  
+> LinkedIn: [linkedin.com/in/felipe-barros-ai](https://www.linkedin.com/in/felipe-barros-ai/)
 
-Hi there, Developer! 👋 We're excited to have you on board. Chainlit is a powerful tool designed to help you prototype, debug and share applications built on top of LLMs.
+---
 
-## Useful Links 🔗
+### 📦 Repositório do Projeto no GitHub
+Acesse o código-fonte completo, arquitetura, suíte de testes e documentação:  
+👉 **[Abrir Repositório no GitHub (FelipeBebas/artefact-ai-engineer-emporio)](https://github.com/FelipeBebas/artefact-ai-engineer-emporio)**
 
-- **Documentation:** Get started with our comprehensive [Chainlit Documentation](https://docs.chainlit.io) 📚
-- **Discord Community:** Join our friendly [Chainlit Discord](https://discord.gg/k73SQ3FyUh) to ask questions, share your projects, and connect with other developers! 💬
+---
 
-We can't wait to see what you create with Chainlit! Happy coding! 💻😊
-
-## Welcome screen
-
-To modify the welcome screen, edit the `chainlit.md` file at the root of your project. If you do not want a welcome screen, just leave this file empty.
+### 🏛️ Arquitetura da Solução
+- **Agente Conversacional**: LangGraph com StateGraph e `MemorySaver` para memória multi-turn determinística.
+- **Tools Determinísticas**:
+  1. `consultar_catalogo`: Busca de instrumentos com filtros rígidos de teto de preço, categoria e disponibilidade de estoque.
+  2. `consultar_pedido`: Rastreamento de pedidos em tempo real por ID, código de rastreio (`BR...BR`), e-mail ou telefone.
+  3. `consultar_promocoes`: Consulta de condições vigentes (PIX com 5% de desconto, até 12x sem juros).
+- **Guardrails de Negócio**: Escopo exclusivo de instrumentos musicais (recusa cordial e redirecionamento de acessórios como cordas, palhetas, cabos e pedais).
+- **Interface e Experiência**: Chainlit com tema WhatsApp Dark personalizado na identidade visual Rosa (`#831843`).
