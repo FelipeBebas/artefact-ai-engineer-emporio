@@ -1,0 +1,23 @@
+# Ambientes virtuais
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Pytest e testes
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Variáveis de ambiente secretas
+.env
+
+# Banco de dados local (gerado dinamicamente via src/database/init_db.py)
+emporio.db
+
+# Chainlit
+.chainlit/

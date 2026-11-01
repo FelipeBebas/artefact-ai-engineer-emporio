@@ -1,0 +1,11 @@
+# Dependências do Agente Empório da Música
+langgraph>=0.2.68
+langchain>=0.3.18
+langchain-core>=0.3.36
+langchain-openai>=0.3.6
+langchain-google-genai>=2.0.9
+pydantic>=2.10.6
+chainlit>=2.2.0
+python-dotenv>=1.0.1
+tabulate>=0.9.0
+pytest>=8.3.4
