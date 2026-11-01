@@ -57,7 +57,6 @@ div[data-panel-group],
 div[data-panel] > div,
 div[class*="overflow-y-auto"],
 div[class*="overflow-auto"],
-div[class*="flex-grow"],
 div.dropzone,
 div.tasklist,
 main,
@@ -77,8 +76,6 @@ html.dark div[class*="overflow-y-auto"],
 .dark div[class*="overflow-y-auto"],
 html.dark div[class*="overflow-auto"],
 .dark div[class*="overflow-auto"],
-html.dark div[class*="flex-grow"],
-.dark div[class*="flex-grow"],
 html.dark div.dropzone,
 .dark div.dropzone,
 html.dark main,
@@ -115,14 +112,34 @@ html.dark main,
 }
 
 /* Balão do Usuário (User 1 - Direita) */
+/* Encapsulado em cinza elegante (um pouco mais claro que o fundo), formato WhatsApp com rabicho na direita */
 div[data-step-type="user_message"] div.bg-accent,
 div[data-step-type="user_message"] .bg-accent,
+div[data-step-type="user_message"] div[class*="rounded-3xl"],
 div[data-step-type="user_message"] div:has(> .edit-message) {
+    background-color: hsl(var(--secondary)) !important;
+    border: 1px solid hsl(var(--border)) !important;
+    border-radius: 16px 4px 16px 16px !important;
+    padding: 12px 18px !important;
+    color: hsl(var(--foreground)) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16) !important;
     animation: messageSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
 }
 
+/* Modo Escuro: Contraste perfeito do balão do usuário sobre o fundo */
+html.dark div[data-step-type="user_message"] div.bg-accent,
+.dark div[data-step-type="user_message"] div.bg-accent,
+html.dark div[data-step-type="user_message"] div[class*="rounded-3xl"],
+.dark div[data-step-type="user_message"] div[class*="rounded-3xl"],
+html.dark div[data-step-type="user_message"] div:has(> .edit-message),
+.dark div[data-step-type="user_message"] div:has(> .edit-message) {
+    background-color: hsl(0 0% 21%) !important;
+    border: 1px solid hsl(0 0% 28%) !important;
+    color: hsl(0 0% 95%) !important;
+}
+
 /* Balão do Assistente / System (User 2 - Esquerda) */
-/* Cinza elegante um pouco mais claro que o fundo, no formato de balão com cantos arredondados */
+/* Cinza suave (18% vs 13% do fundo), formato WhatsApp com rabicho na esquerda */
 div[data-step-type="assistant_message"] .message-content,
 .ai-message .message-content {
     background-color: hsl(var(--card)) !important;
@@ -133,6 +150,16 @@ div[data-step-type="assistant_message"] .message-content,
     max-width: 82% !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14) !important;
     animation: messageSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+/* Modo Escuro: Balão do assistente em cinza suave */
+html.dark div[data-step-type="assistant_message"] .message-content,
+.dark div[data-step-type="assistant_message"] .message-content,
+html.dark .ai-message .message-content,
+.dark .ai-message .message-content {
+    background-color: hsl(0 0% 18%) !important;
+    border: 1px solid hsl(0 0% 25%) !important;
+    color: hsl(0 0% 93%) !important;
 }
 
 /* Ajuste de espaçamento interno do texto dentro do balão do assistente */
