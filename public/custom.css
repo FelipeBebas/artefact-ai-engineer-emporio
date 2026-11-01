@@ -113,14 +113,24 @@ div[data-step-type] {
 }
 
 /* --------------------------------------------------------------------------
-   Balão do Usuário (User 1 - Direita)
+   Balão ÚNICO do Usuário (User 1 - Direita)
    Rosa escuro da identidade visual (equivalente ao verde #005c4b do WhatsApp)
    -------------------------------------------------------------------------- */
 
-div[data-step-type="user_message"] div.bg-accent,
-div[data-step-type="user_message"] .bg-accent,
-div[data-step-type="user_message"] div[class*="rounded-3xl"],
-div[data-step-type="user_message"] div:has(> .edit-message) {
+/* Neutralizar todos os containers pai do balão do usuário */
+div[data-step-type="user_message"],
+div[data-step-type="user_message"] > div,
+div[data-step-type="user_message"] div.flex,
+div[data-step-type="user_message"] div.group {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+/* O BALÃO ÚNICO DO USUÁRIO */
+div[data-step-type="user_message"] div.bg-accent {
     background-color: #831843 !important; /* Rosa elegante da identidade visual */
     color: #ffffff !important;
     border-radius: 8px !important;
@@ -135,10 +145,27 @@ div[data-step-type="user_message"] div:has(> .edit-message) {
     animation: messageSlideUp 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
 }
 
-div[data-step-type="user_message"] p,
-div[data-step-type="user_message"] span,
-div[data-step-type="user_message"] div {
+/* Neutralizar qualquer container interno para evitar cápsula dupla */
+div[data-step-type="user_message"] div.bg-accent > div {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Cores do texto */
+div[data-step-type="user_message"] div.bg-accent p,
+div[data-step-type="user_message"] div.bg-accent span {
     color: #ffffff !important;
+}
+
+/* Desativar visualmente qualquer botão de edição */
+.edit-message,
+button:has(svg.lucide-pencil),
+button[aria-label="Edit message"] {
+    display: none !important;
 }
 
 /* --------------------------------------------------------------------------
