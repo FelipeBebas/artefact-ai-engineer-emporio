@@ -173,7 +173,7 @@ def process_scenarios_html(scenarios_raw: str) -> str:
         )
         card_content = re.sub(
             r'<li>\s*<p><strong>Resposta da Empório da Música:</strong></p>\s*<blockquote>(.*?)</blockquote>\s*</li>',
-            r'<div class="dialogue-box agent-box"><strong>🎸 Empório da Música:</strong><blockquote>\1</blockquote></div>',
+            r'<div class="dialogue-box agent-box"><strong>🎸 Empório da Música (AI Agent):</strong><blockquote>\1</blockquote></div>',
             card_content,
             flags=re.DOTALL
         )
@@ -557,7 +557,7 @@ def build_html():
       <span class="badge-release">Release v1.0.0</span>
     </div>
     <div class="header-tagline">
-      Empório da Música &bull; Campo Grande, MS &bull; Outubro 2026
+      Empório da Música &bull; Campo Grande, MS &bull; Technical Case
     </div>
   </div>
 
@@ -567,10 +567,10 @@ def build_html():
     <div class="page-break"></div>
 
     <div class="doc-divider-card">
-      <h2>📑 Parte II: Documentação de Cenários de Interação</h2>
+      <h2>📑 Part II: Documented Interaction Scenarios (Empório da Música)</h2>
       <p>
-        Evidências determinísticas de execução conversacional, validação de políticas da loja (Zero-Flake),
-        consultas ao banco de dados relacional SQLite em tempo real e testes de guardrails de escopo (rejeição de acessórios).
+        Deterministic conversational transcripts, Zero-Flake store policy validation,
+        real-time relational SQLite queries, and strict scope guardrail enforcement (accessories refusal).
       </p>
     </div>
 
