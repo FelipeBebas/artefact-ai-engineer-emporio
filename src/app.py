@@ -212,38 +212,54 @@ async def on_chat_start():
 
 
 async def process_user_query(query_text: str):
-    """Execução do agente LangGraph e exibição dos passos de ferramentas."""
+    """Execução do agente LangGraph e exibição dos passos de ferramentas com fallback resiliente."""
     thread_id = cl.user_session.get("thread_id", "default_thread")
     config = {"configurable": {"thread_id": thread_id}}
     app = get_agent_graph()
 
-    inputs = {"messages": [HumanMessage(content=query_text)]}
-
     final_reply = ""
-    for chunk in app.stream(inputs, config=config, stream_mode="updates"):
-        for node_name, node_output in chunk.items():
-            if node_name == "agent":
-                ai_message = node_output["messages"][-1]
-                if hasattr(ai_message, "tool_calls") and ai_message.tool_calls:
-                    for call in ai_message.tool_calls:
-                        async with cl.Step(name=f"Consultando: {call['name']}", type="tool") as step:
-                            step.input = call.get("args", {})
-                else:
-                    final_reply = ai_message.content
+    try:
+        inputs = {"messages": [HumanMessage(content=query_text)]}
+        for chunk in app.stream(inputs, config=config, stream_mode="updates"):
+            for node_name, node_output in chunk.items():
+                if node_name == "agent":
+                    ai_message = node_output["messages"][-1]
+                    if hasattr(ai_message, "tool_calls") and ai_message.tool_calls:
+                        for call in ai_message.tool_calls:
+                            try:
+                                async with cl.Step(name=f"Consultando: {call['name']}", type="tool") as step:
+                                    step.input = call.get("args", {})
+                            except Exception:
+                                pass
+                    else:
+                        final_reply = ai_message.content
 
-            elif node_name == "tools":
-                tool_messages = node_output.get("messages", [])
-                for t_msg in tool_messages:
-                    tool_name = getattr(t_msg, "name", "tool")
-                    async with cl.Step(name=f"Resultado: {tool_name}", type="tool") as step:
-                        step.output = t_msg.content[:400] + ("..." if len(t_msg.content) > 400 else "")
+                elif node_name == "tools":
+                    tool_messages = node_output.get("messages", [])
+                    for t_msg in tool_messages:
+                        tool_name = getattr(t_msg, "name", "tool")
+                        try:
+                            async with cl.Step(name=f"Resultado: {tool_name}", type="tool") as step:
+                                step.output = t_msg.content[:400] + ("..." if len(t_msg.content) > 400 else "")
+                        except Exception:
+                            pass
+
+        if not final_reply:
+            snapshot = app.get_state(config)
+            if snapshot.values.get("messages"):
+                final_reply = snapshot.values["messages"][-1].content
+    except Exception as stream_err:
+        # Fallback para invocação direta via thread segura
+        try:
+            final_reply = await asyncio.to_thread(run_agent_message, query_text, thread_id, app)
+        except Exception as fallback_err:
+            final_reply = (
+                f"Desculpe, ocorreu uma instabilidade na comunicação com o assistente ({fallback_err}). "
+                "Por favor, tente novamente em alguns instantes."
+            )
 
     if not final_reply:
-        snapshot = app.get_state(config)
-        if snapshot.values.get("messages"):
-            final_reply = snapshot.values["messages"][-1].content
-        else:
-            final_reply = "Desculpe, ocorreu uma instabilidade ao gerar a resposta. Poderia repetir a pergunta?"
+        final_reply = "Desculpe, ocorreu uma instabilidade ao gerar a resposta. Poderia repetir a pergunta?"
 
     await cl.Message(content=final_reply).send()
 
@@ -253,12 +269,17 @@ async def on_quick_prompt(action: cl.Action):
     """Disparado quando o usuário clica em um botão de sugestão de teste."""
     welcome_msg = cl.user_session.get("welcome_msg")
     if welcome_msg:
-        await welcome_msg.remove_actions()
+        try:
+            await welcome_msg.remove_actions()
+        except Exception:
+            pass
         cl.user_session.set("welcome_msg", None)
 
     prompt = action.payload.get("prompt", "")
     if prompt:
-        await cl.Message(content=prompt).send()
+        # Envia como user_message autêntica no balão rosa da direita
+        user_msg = cl.Message(content=prompt, author="User", type="user_message")
+        await user_msg.send()
         await process_user_query(prompt)
 
 
@@ -267,7 +288,10 @@ async def on_message(message: cl.Message):
     """Processamento de mensagens digitadas pelo usuário no chat."""
     welcome_msg = cl.user_session.get("welcome_msg")
     if welcome_msg:
-        await welcome_msg.remove_actions()
+        try:
+            await welcome_msg.remove_actions()
+        except Exception:
+            pass
         cl.user_session.set("welcome_msg", None)
 
     await process_user_query(message.content)

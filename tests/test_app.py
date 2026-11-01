@@ -72,3 +72,39 @@ def test_order_tracking_data_exists():
     assert order["tracking_code"] == "BRJL5544332BR"
     assert order["status"] == "shipped"
     assert order["customer_name"] == "Ana Carolina Ferreira"
+
+
+def test_quick_prompt_user_message_type_and_author():
+    """Valida que o callback de ação instancia a mensagem como user_message de autoria User."""
+    import sys
+    from unittest.mock import AsyncMock, patch
+    import chainlit as cl
+    from src.app import on_quick_prompt
+
+    context_mod = sys.modules["chainlit.context"]
+
+    action = cl.Action(
+        name="quick_prompt",
+        payload={"prompt": "Quanto custa o Takamine GD20?"},
+        label="💰 Preço Takamine GD20",
+    )
+
+    captured_messages = []
+
+    async def fake_send(self):
+        captured_messages.append(self)
+        return self
+
+    async def run_scenario():
+        context_mod.init_http_context()
+        with patch.object(cl.Message, "send", fake_send), patch("src.app.process_user_query", new_callable=AsyncMock):
+            await on_quick_prompt(action)
+
+    asyncio.run(run_scenario())
+
+    assert len(captured_messages) == 1
+    user_msg = captured_messages[0]
+    assert user_msg.content == "Quanto custa o Takamine GD20?"
+    assert user_msg.author == "User"
+    assert user_msg.type == "user_message"
+
