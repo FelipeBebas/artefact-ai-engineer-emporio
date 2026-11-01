@@ -279,28 +279,22 @@ div[data-step-type="assistant_message"] .rounded-full {
 }
 
 /* --------------------------------------------------------------------------
-   5. Passos das Ferramentas (Tool Steps) com Detalhe Rosa Primary
+   5. Passos das Ferramentas (Tool Steps) — Cápsulas Limpas (Sem Linhas Laterais)
    -------------------------------------------------------------------------- */
 
 div[data-step-type="tool"],
 .step-item,
-div[id^="step-"] {
+div[id^="step-"],
+.step {
     margin-top: 2px !important;
     margin-bottom: 2px !important;
-    border-left: 3px solid #f43f5e !important;
-    border-radius: 6px !important;
-    transition: transform 0.15s ease !important;
+    border-left: none !important;
 }
 
 /* Separação interna entre cartões/cápsulas de step consecutivas */
 div[data-step-type="tool"] + div[data-step-type="tool"],
 .step-item + .step-item {
     margin-top: 2px !important;
-}
-
-div[data-step-type="tool"]:hover,
-.step-item:hover {
-    transform: translateX(2px) !important;
 }
 
 

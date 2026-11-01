@@ -124,4 +124,9 @@ def test_custom_css_step_separation_and_avatar_offset():
     assert ".aspect-square.h-full.w-full.bg-transparent" in content
     assert "margin-left: 2px !important;" in content
 
+    # Linhas laterais rosas (border-left) removidas para manter o design limpo
+    assert "border-left: 3px" not in content
+    assert "border-left: none !important;" in content
+
+
 
