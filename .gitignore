@@ -20,4 +20,5 @@ htmlcov/
 emporio.db
 
 # Chainlit
-.chainlit/
+.chainlit/*
+!.chainlit/config.toml
