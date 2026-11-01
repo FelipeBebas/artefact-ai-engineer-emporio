@@ -19,52 +19,38 @@ The agent resolves human team overload by providing instantaneous, welcoming, an
 
 ## 🏛️ System Architecture
 
-```text
-                                [ Customer / User ]
-                                         |
-                                         v
-                         [ Modern Chat UI: Chainlit ]
-                          (or Terminal Runner: cli.py)
-                                         |
-                                         v
-+-----------------------------------------------------------------------------------+
-|                            LANGGRAPH STATEGRAPH ENGINE                            |
-|                                                                                   |
-|  1. MessagesState & Checkpointer (MemorySaver for multi-turn contextual memory)   |
-|                                                                                   |
-|  2. Agent Node (LLM + System Persona + Business Guardrails):                      |
-|     - Music specialist persona ("knowledgeable friend", empathetic & concise)    |
-|     - Accessory Scope Guardrail: Early intercept & cordial redirection            |
-|     - Decision: Direct Response vs. Deterministic Tool Calls                      |
-+------------------------------------+----------------------------------------------+
-                                     |
-                +--------------------+--------------------+
-                |       [ Tool Invocation Needed? ]       |
-                +--------------------+--------------------+
-                                     |
-                             Yes     v     No
-       +-----------------------------+-----------------------------+
-       |                                                           |
-       v                                                           v
-+------------------------------------+                    +-----------------+
-|             TOOL NODE              |                    | Direct Response |
-|                                    |                    | to Customer     |
-| 1. consultar_catalogo()            |                    +-----------------+
-|    - SQLite catalog query          |                             ^
-|    - Strict price/stock filtering  |                             |
-|                                    |                             |
-| 2. consultar_pedido()              |                             |
-|    - Lookup by ID, tracking, email |                             |
-|                                    |                             |
-| 3. consultar_promocoes()           |                             |
-|    - Active discounts & validity   |                             |
-|                                    |                             |
-| 4. consultar_politicas()           |                             |
-|    - Zero-Flake Sectional Lookup   |                             |
-+-----------------+------------------+                             |
-                  |                                                |
-                  +---------------- Factual Grounding -------------+
-                             (ToolMessage with raw truth)
+```mermaid
+flowchart TD
+    User(["👤 Customer / User"]) --> UI["💬 Chat UI (Chainlit) / REST API (FastAPI)"]
+    UI --> Engine["⚙️ LangGraph StateGraph Engine (MessagesState & MemorySaver Checkpointer)"]
+    
+    subgraph AgentCore ["🧠 Agent Node & Guardrails"]
+        Engine --> LLM["🤖 LLM Specialist Persona (Empathetic, Concise & Music-Focused)"]
+        LLM --> Guardrail{"🛡️ Scope Guardrail: Accessories Intercept?"}
+    end
+
+    Guardrail -- "Yes (Strings, Picks, Amps, Cables)" --> Refusal["🚫 Cordial Redirection (Instruments-Only & Partner Referral)"]
+    Guardrail -- "No (Instrument / In-Scope)" --> Decision{"🔍 Tool Invocation Needed?"}
+    
+    Decision -- "No (Greeting / General FAQ)" --> DirectReply["📝 Direct Response Formulation"]
+    
+    subgraph ToolNode ["🛠️ Deterministic Tool Node"]
+        Decision -- "Yes" --> Tools["Invoking Specialized Tools"]
+        Tools --> T1["🎸 consultar_catalogo: SQLite Filter (Category, Stock, Max Price)"]
+        Tools --> T2["📦 consultar_pedido: Real-Time Lookup (ID, Tracking, Phone)"]
+        Tools --> T3["💳 consultar_promocoes: Active Discounts (PIX 5%, 12x Installments)"]
+        Tools --> T4["📋 consultar_politicas: Zero-Flake Pydantic Enum Engine"]
+    end
+    
+    T1 --> Grounding["📊 Factual Grounding Context (ToolMessage)"]
+    T2 --> Grounding
+    T3 --> Grounding
+    T4 --> Grounding
+    
+    Grounding --> Synthesis["✨ Grounded Answer Synthesis"]
+    DirectReply --> UI
+    Refusal --> UI
+    Synthesis --> UI
 ```
 
 ---
@@ -225,6 +211,7 @@ With additional engineering runway, the following production enhancements would 
 2. **Automated LLM-as-a-Judge Evaluation Pipeline:** Continuous evaluation with Langfuse or Ragas tracking Groundedness, Answer Relevance, and False-Acceptance Rate for out-of-scope accessory requests across model releases.
 3. **Voice Note Processing (Audio Support):** Integrating OpenAI Whisper for transcription and ElevenLabs/TTS for voice messaging, catering to frequent audio habits on WhatsApp.
 4. **Semantic Caching:** Implementing Redis-based semantic caching for static corporate inquiries (address, business hours, parking) to achieve sub-50ms latency and reduce token costs.
+5. **Digital & Electronic Instrument Troubleshooting Agent:** Specialized diagnostic decision-tree subagent for digital and electro-acoustic instruments sold by the store (synthesizers, digital pianos, electronic drum modules, and onboard preamps). The agent would guide customers through connectivity troubleshooting (MIDI channels, USB-Audio interfaces, driver setup, and signal flow issues) before opening an RMA or warranty repair ticket.
 
 ---
 
@@ -242,4 +229,5 @@ In full alignment with Artefact's transparency guidelines:
 ## 💬 Documented Interaction Scenarios
 
 For complete conversational transcripts demonstrating the agent tackling real-world scenarios (including catalog search under R$1000, store location/hours, Takamine GD20 pricing, return policy application, and accessory refusal):
-👉 [**`docs/cenarios_interacao.md`**](file:///e:/@Vault/[01]%20Conhecimento%20&%20Carreira/Portfolio%20&%20CV/Artefact/docs/cenarios_interacao.md)
+👉 [artefact-ai-engineer-emporio/docs/cenarios_interacao.md at master · FelipeBebas/artefact-ai-engineer-emporio](https://github.com/FelipeBebas/artefact-ai-engineer-emporio/blob/master/docs/cenarios_interacao.md)
+
