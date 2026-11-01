@@ -3,58 +3,144 @@
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. Papel de Parede Agnóstico (Doodle Musical: Claro & Escuro)
+   1. Papel de Parede Agnóstico (Doodle Musical: Modo Claro & Escuro)
    -------------------------------------------------------------------------- */
 
 /* Modo Claro: Bege Clássico do WhatsApp (#efeae2) com traços suaves */
+html,
+body,
+#root,
+.h-screen,
 main,
-#chat-container,
-.main-chat-container,
-div[data-testid="chat-messages"] {
+[data-sidebar="inset"],
+div[data-panel],
+div[data-panel-group],
+div[class*="overflow-y-auto"],
+div[class*="overflow-auto"] {
     background-color: #efeae2 !important;
-    position: relative;
 }
 
-/* Camada do SVG Doodle repetido com opacidade sutil */
-main::before,
-#chat-container::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+/* Aplicação direta do wallpaper doodle no body e no container principal */
+body,
+#root,
+div[data-panel],
+main {
     background-image: url("/public/doodle-background.svg") !important;
     background-repeat: repeat !important;
     background-size: 380px !important;
-    opacity: 0.065;
-    pointer-events: none;
-    z-index: 0;
+    background-attachment: fixed !important;
 }
 
-/* Modo Escuro: Grafite do WhatsApp Dark (#0b141a) com inversão de traços */
+/* Manter os containers intermediários transparentes para revelar o papel de parede */
+#root > div,
+div[data-panel-group],
+div[data-panel] > div,
+div[class*="overflow-y-auto"],
+div[class*="overflow-auto"],
+div[class*="flex-grow"],
+div.dropzone,
+div.tasklist {
+    background-color: transparent !important;
+}
+
+/* Modo Escuro: Grafite do WhatsApp Dark (#0b141a) com doodle branco suave */
+html.dark,
+html.dark body,
+.dark body,
+html.dark #root,
+.dark #root,
+html.dark .h-screen,
+.dark .h-screen,
+html.dark main,
 .dark main,
-.dark #chat-container,
-.dark .main-chat-container,
-.dark div[data-testid="chat-messages"] {
+html.dark [data-sidebar="inset"],
+.dark [data-sidebar="inset"],
+html.dark div[data-panel],
+.dark div[data-panel],
+html.dark div[data-panel-group],
+.dark div[data-panel-group],
+html.dark div[class*="overflow-y-auto"],
+.dark div[class*="overflow-y-auto"],
+html.dark div[class*="overflow-auto"],
+.dark div[class*="overflow-auto"] {
     background-color: #0b141a !important;
 }
 
-.dark main::before,
-.dark #chat-container::before {
-    filter: invert(1);
-    opacity: 0.05;
+html.dark body,
+.dark body,
+html.dark #root,
+.dark #root,
+html.dark div[data-panel],
+.dark div[data-panel],
+html.dark main,
+.dark main {
+    background-image: url("/public/doodle-dark.svg") !important;
+    background-repeat: repeat !important;
+    background-size: 380px !important;
+    background-attachment: fixed !important;
+}
+
+html.dark #root > div,
+.dark #root > div,
+html.dark div[data-panel-group],
+.dark div[data-panel-group],
+html.dark div[data-panel] > div,
+.dark div[data-panel] > div,
+html.dark div[class*="overflow-y-auto"],
+.dark div[class*="overflow-y-auto"],
+html.dark div[class*="overflow-auto"],
+.dark div[class*="overflow-auto"],
+html.dark div[class*="flex-grow"],
+.dark div[class*="flex-grow"],
+html.dark div.dropzone,
+.dark div.dropzone {
+    background-color: transparent !important;
 }
 
 /* --------------------------------------------------------------------------
-   2. Balões de Mensagens (Estilo WhatsApp) & Micro-Animações
+   2. Barra Superior (Header) Estilo WhatsApp
+   -------------------------------------------------------------------------- */
+
+#header {
+    background-color: #f0f2f5 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+    backdrop-filter: blur(8px) !important;
+    z-index: 20 !important;
+}
+
+html.dark #header,
+.dark #header {
+    background-color: #202c33 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. Caixa de Entrada de Mensagens (Composer)
+   -------------------------------------------------------------------------- */
+
+#message-composer {
+    background-color: #ffffff !important;
+    border-radius: 20px !important;
+    box-shadow: 0 1px 3px rgba(11, 20, 26, 0.12) !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+html.dark #message-composer,
+.dark #message-composer {
+    background-color: #2a3942 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. Balões de Mensagens (Estilo WhatsApp) & Micro-Animações
    -------------------------------------------------------------------------- */
 
 /* Animação fluida de entrada das mensagens (Slide-up + Fade-in) */
 @keyframes messageSlideUp {
     from {
         opacity: 0;
-        transform: translateY(10px) scale(0.99);
+        transform: translateY(8px) scale(0.99);
     }
     to {
         opacity: 1;
@@ -62,45 +148,53 @@ main::before,
     }
 }
 
-/* Balões de mensagens do usuário (verde suave no claro, verde escuro no dark) */
-div[data-testid="user-message"] {
+/* Balões do Usuário (Verde WhatsApp no Claro, Teal no Escuro) */
+div[data-step-type="user_message"] div.bg-accent,
+div[data-step-type="user_message"] .bg-accent,
+div[data-step-type="user_message"] div:has(> .edit-message) {
     background-color: #d9fdd3 !important;
     color: #111b21 !important;
     border-radius: 12px 0px 12px 12px !important;
     box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13) !important;
     animation: messageSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
-    z-index: 1;
 }
 
-.dark div[data-testid="user-message"] {
+html.dark div[data-step-type="user_message"] div.bg-accent,
+.dark div[data-step-type="user_message"] div.bg-accent,
+html.dark div[data-step-type="user_message"] .bg-accent,
+.dark div[data-step-type="user_message"] .bg-accent,
+html.dark div[data-step-type="user_message"] div:has(> .edit-message),
+.dark div[data-step-type="user_message"] div:has(> .edit-message) {
     background-color: #005c4b !important;
     color: #e9edef !important;
     box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* Balões de mensagens do assistente (Empório da Música) */
-div[data-testid="assistant-message"] {
+/* Balões do Assistente (Empório da Música) */
+div[data-step-type="assistant_message"] .ai-message,
+div.ai-message {
     background-color: #ffffff !important;
     color: #111b21 !important;
     border-radius: 0px 12px 12px 12px !important;
+    padding: 12px 16px !important;
     box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13) !important;
     animation: messageSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
-    z-index: 1;
 }
 
-.dark div[data-testid="assistant-message"] {
+html.dark div[data-step-type="assistant_message"] .ai-message,
+.dark div[data-step-type="assistant_message"] .ai-message,
+html.dark div.ai-message,
+.dark div.ai-message {
     background-color: #202c33 !important;
     color: #e9edef !important;
     box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* --------------------------------------------------------------------------
-   3. Botão "Nova Conversa" com Destaque
+   5. Botão "Nova Conversa" com Destaque
    -------------------------------------------------------------------------- */
 
-#new-chat-button,
-button[aria-label="New Chat"],
-button[title="New Chat"] {
+#new-chat-button {
     background-color: #25d366 !important; /* Verde WhatsApp */
     color: #ffffff !important;
     font-weight: 600 !important;
@@ -113,9 +207,7 @@ button[title="New Chat"] {
     box-shadow: 0 2px 4px rgba(37, 211, 102, 0.25) !important;
 }
 
-#new-chat-button:hover,
-button[aria-label="New Chat"]:hover,
-button[title="New Chat"]:hover {
+#new-chat-button:hover {
     background-color: #1ebe57 !important;
     transform: translateY(-1px) !important;
     box-shadow: 0 4px 8px rgba(37, 211, 102, 0.35) !important;
@@ -128,32 +220,17 @@ button[title="New Chat"]:hover {
 }
 
 /* --------------------------------------------------------------------------
-   4. Passos das Ferramentas (Tool Steps) & Indicadores
+   6. Passos das Ferramentas (Tool Steps) & Indicadores
    -------------------------------------------------------------------------- */
 
-/* Cartões de ferramentas (cl.Step) */
-.step-item,
-div[data-testid="step-item"] {
+div[data-step-type="tool"],
+.step-item {
     border-left: 3px solid #25d366 !important;
     border-radius: 6px !important;
     transition: transform 0.15s ease !important;
 }
 
+div[data-step-type="tool"]:hover,
 .step-item:hover {
     transform: translateX(2px) !important;
-}
-
-/* Efeito sutil de digitação/pensamento */
-@keyframes soundwavePulse {
-    0%, 100% {
-        opacity: 0.6;
-    }
-    50% {
-        opacity: 1;
-        filter: drop-shadow(0 0 4px rgba(37, 211, 102, 0.5));
-    }
-}
-
-.thinking-pulse {
-    animation: soundwavePulse 1.2s infinite ease-in-out;
 }
